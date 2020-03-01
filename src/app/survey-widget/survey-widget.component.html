@@ -1,0 +1,39 @@
+<div *digLet="{ activeQuestionIndex: activeQuestionIndex$ | async, state: state$ | async } as s;"
+      digAnimate="landing"
+      speed="fast">
+
+  <section *ngIf="config$ | async as config"
+           class="micro-survey-widget">
+
+    <survey-showcase (start)="start()"
+                     [config]="config" *ngIf="!expired && (s.activeQuestionIndex === null || s.activeQuestionIndex === undefined)"></survey-showcase>
+
+    <ul *ngIf="!expired && s.activeQuestionIndex !== null"
+        class="questions">
+
+      <li *ngFor="let question of config.questions; let i = index">
+
+        <survey-question *ngIf="i === s.activeQuestionIndex"
+                         @bothSideCollapse
+                         [question]="question"
+                         [selectedAnswer]="s?.state?.answers[i]"
+                         (answer)="handleAnswer(i, $event)"></survey-question>
+
+      </li>
+
+    </ul>
+
+    <survey-end *ngIf="expired || s.activeQuestionIndex >= config.questions.length"
+                [expired]="expired"
+                @verticalCollapse></survey-end>
+
+    <survey-paginator *ngIf="!expired && (s.activeQuestionIndex !== null && s.activeQuestionIndex < config.questions.length)"
+                      (onPage)="handleQuestionChange($event)"
+                      [disabledNextBtn]="!s.state?.answers[s.activeQuestionIndex] &&! config.questions[s.activeQuestionIndex]?.options?.optional"
+                      [currentPage]="s.activeQuestionIndex"
+                      [maxPages]="config.questions.length"></survey-paginator>
+
+  </section>
+
+
+</div>

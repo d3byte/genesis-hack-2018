@@ -1,0 +1,16 @@
+@import '../../space';
+
+section {
+  padding: $space * 3;
+}
+
+.title {
+  margin: 0 auto;
+  max-width: 75%;
+  text-align: center;
+}
+
+.btn {
+  margin: ($space * 3) auto 0 !important;
+  width: 75% !important;
+}

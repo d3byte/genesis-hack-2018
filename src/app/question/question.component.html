@@ -1,0 +1,15 @@
+<section class="question">
+
+  <h1 class="title">{{ question.question }}</h1>
+
+  <main class="answer">
+
+    <survey-rating-scale *ngIf="question.answerType === answerTypes.RATE"
+                         [rateScales]="question?.options?.rateScales"
+                         [answers]="question.answers"
+                         [answeredItem]="selectedAnswer"
+                         (answer)="propagateAnswer($event)"></survey-rating-scale>
+
+  </main>
+
+</section>

@@ -1,0 +1,76 @@
+@import '../../space';
+
+.rating-scale {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(30px, 1fr));
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &.double {
+    grid-template-columns: repeat(2, minmax(30px, 106px));
+  }
+
+  &__item {
+    align-items: center;
+    border: 0;
+    box-sizing: content-box;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    outline: none;
+    padding-top: 100%;
+    position: relative;
+    transition: 0.2s ease-in-out;
+    user-select: none;
+
+    &--active {
+      box-shadow: -5px -5px 30px 5px rgba(0, 0, 0, 0.14), 5px 5px 30px 5px rgba(0, 0, 0, 0.14);
+      transform: scale(1.1);
+      z-index: 2;
+
+      &:active {
+        transform: scale(1.2);
+      }
+    }
+
+    &__inner {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+    }
+
+    &__text {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    &.red {
+      background: rgb(232, 76, 94);
+    }
+
+    &.orange {
+      background: rgb(238, 145, 109);
+    }
+
+    &.yellow {
+      background: rgb(250, 224, 95);
+    }
+
+    &.light-green {
+      background: rgb(172, 238, 140);
+    }
+
+    &.green {
+      background: rgb(147, 219, 112);
+    }
+  }
+}
+
+.scale-description {
+  padding-bottom: $space * 1.5;
+}

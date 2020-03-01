@@ -1,0 +1,29 @@
+@import '../../space';
+
+:host {
+  box-sizing: border-box;
+  max-width: 650px;
+  width: 100%;
+}
+
+.micro-survey-widget {
+  background: rgb(116, 209, 192);
+  box-sizing: border-box;
+  color: white;
+
+  > * {
+    padding: $space * 3;
+  }
+
+  .title {
+    margin: 0 auto;
+    max-width: 75%;
+    text-align: center;
+  }
+}
+
+.questions {
+  list-style: none;
+  margin: 0;
+  padding: 0 !important;
+}

@@ -1,0 +1,13 @@
+@import '../../space';
+
+:host {
+  display: block;
+}
+
+.title {
+  margin-bottom: $space * 3;
+}
+
+.question {
+  padding: $space * 3;
+}

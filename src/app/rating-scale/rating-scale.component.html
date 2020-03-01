@@ -1,0 +1,33 @@
+<div *ngIf="rateScales" class="scale-description row space-between">
+
+  <span class="caption">{{ rateScales[0] }}</span>
+
+  <span class="caption">{{ rateScales[1] }}</span>
+
+</div>
+
+<ul class="rating-scale"
+    [class.double]="answers.length === 2"
+    *digLet="nextActiveRate$ | async as nextActiveRate"
+    (mouseleave)="handleHover(null)">
+
+  <li class="rating-scale__item red"
+      *ngFor="let answer of answers; let i = index"
+      [class.rating-scale__item--active]="!nextActiveRate && answeredItem?.index === i || nextActiveRate === (i + 1)"
+      [class.red]="i === 0"
+      [class.orange]="i === 1 && answers.length === 5"
+      [class.yellow]="i === 2 && answers.length === 5"
+      [class.light-green]="i === 3 && answers.length === 5"
+      [class.green]="i === answers.length - 1"
+      (mouseover)="handleHover(i + 1)"
+      (click)="handleSelect({ value: answer, index: i })">
+
+    <div class="rating-scale__item__inner">
+
+      <span class="rating-scale__item__text">{{ answer.text }}</span>
+
+    </div>
+
+  </li>
+
+</ul>
