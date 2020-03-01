@@ -1,0 +1,550 @@
+basePath: /api/v1
+definitions:
+  models.AnswerInterface:
+    properties:
+      text:
+        type: string
+      value:
+        items:
+          type: object
+        type: array
+    type: object
+  models.ConfigInterface:
+    properties:
+      creatorId:
+        type: string
+      expirationDate:
+        type: string
+      id:
+        example: bson id
+        type: string
+      publicToken:
+        type: string
+      questions:
+        items:
+          $ref: '#/definitions/models.QuestionInterface'
+        type: array
+      title:
+        type: string
+    type: object
+  models.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  models.HTTPSuccess:
+    properties:
+      code:
+        example: 200
+        type: integer
+    type: object
+  models.Options:
+    properties:
+      amount:
+        type: integer
+      inputType:
+        type: string
+      optional:
+        type: boolean
+    type: object
+  models.QuestionInterface:
+    properties:
+      answerType:
+        type: string
+      answers:
+        items:
+          $ref: '#/definitions/models.AnswerInterface'
+        type: array
+      options:
+        $ref: '#/definitions/models.Options'
+        type: object
+      question:
+        type: string
+    type: object
+  models.Spreadsheet:
+    properties:
+      token:
+        description: URL token
+        type: string
+      url:
+        type: string
+    type: object
+  models.SpreadsheetClear:
+    properties:
+      token:
+        description: URL token
+        type: string
+    type: object
+  models.StateInterface:
+    properties:
+      activeQuestionIndex:
+        type: integer
+      answers:
+        type: object
+      completed:
+        type: boolean
+    type: object
+  models.User:
+    properties:
+      email:
+        example: test@test.ru
+        type: string
+      password:
+        example: "12345"
+        type: string
+    type: object
+  models.UserLogin:
+    properties:
+      email:
+        example: test@test.ru
+        type: string
+      password:
+        example: "12345"
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.UserWithHiddenFields:
+    properties:
+      email:
+        example: test@test.ru
+        type: string
+      role:
+        default: 0
+        example: 0
+        type: integer
+    type: object
+host: localhost:8081
+info:
+  contact:
+    email: support@digitory.dev
+    name: Digitory
+    url: http://digitory.dev
+  description: This is MIPT microservice
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: MIPT Service API
+  version: "0.1"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизация пользователя
+      parameters:
+      - description: Поля необходимые для авторизации аккаунта
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserLogin'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserWithHiddenFields'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Авторизация пользователя
+      tags:
+      - Users
+  /mipt:
+    post:
+      consumes:
+      - application/json
+      description: Создание конфига
+      parameters:
+      - description: Поля необходимые для создания конфига
+        in: body
+        name: Mipt
+        required: true
+        schema:
+          $ref: '#/definitions/models.ConfigInterface'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Создать конфиг
+      tags:
+      - Mipt
+  /mipt/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Поиск и вывод конфига по id
+      parameters:
+      - description: ID конфига
+        in: path
+        name: id
+        required: true
+        type: primitive.ObjectID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Поиск конфига по id
+      tags:
+      - Mipt
+  /mipts:
+    get:
+      consumes:
+      - application/json
+      description: Получение списка конфигов
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.HTTPError'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Список конфигов
+      tags:
+      - Mipt
+  /spreadsheet:
+    post:
+      consumes:
+      - application/json
+      description: Create Google Table
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPSuccess'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Create Google Table
+      tags:
+      - Spreadsheet
+  /spreadsheet/append:
+    post:
+      consumes:
+      - application/json
+      description: Append Data
+      parameters:
+      - description: Fields are required
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Spreadsheet'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPSuccess'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Append Data
+      tags:
+      - Spreadsheet
+  /spreadsheet/clear:
+    post:
+      consumes:
+      - application/json
+      description: Clear Data
+      parameters:
+      - description: Fields are required
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.SpreadsheetClear'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPSuccess'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Clear Data
+      tags:
+      - Spreadsheet
+  /spreadsheet/copy:
+    post:
+      consumes:
+      - application/json
+      description: Copy Google Table
+      parameters:
+      - description: Fields are required
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Spreadsheet'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPSuccess'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Copy Google Table
+      tags:
+      - Spreadsheet
+  /state/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Поиск и вывод стейта по id
+      parameters:
+      - description: ID конфига
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Поиск стейта по id
+      tags:
+      - State
+    post:
+      consumes:
+      - application/json
+      description: Создание стейта
+      parameters:
+      - description: ID конфига
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Поля необходимые для создания стейта
+        in: body
+        name: State
+        required: true
+        schema:
+          $ref: '#/definitions/models.StateInterface'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Создать стейт
+      tags:
+      - State
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Создание пользователя
+      parameters:
+      - description: Поля необходимые для создания аккаунта
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserWithHiddenFields'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.HTTPError'
+            type: object
+      summary: Создать пользователя
+      tags:
+      - Users
+swagger: "2.0"

@@ -1,27 +1,22 @@
-# SurveyWidget
+# Build Google middleware
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.1.
+1. Install git and dep
+    ```dockerfile
+    RUN apk add --no-cache curl git
+    RUN curl -fsSL -o /bin/dep https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 && chmod +x /bin/dep
+    ```
+2. Set ENV
+    ```
+    PORT=8080
+    GIN_MODE=release
+    ```
+3. Build Golang project
+    ```dockerfile
+    ADD . $GOPATH/src/google-service
+    WORKDIR $GOPATH/src/google-service
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+    RUN dep ensure
+    RUN go build .
+    CMD ["./google"]
+    EXPOSE 8080
+    ```
